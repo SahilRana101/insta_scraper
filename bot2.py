@@ -101,6 +101,11 @@ for i in user_following_list:
 
         sheet.write(row, column + 3, mentions)
         sheet.write(row, column + 4, links)
+        done_with_user_following_list.append(i)
         row += 1
+
+
+for i in done_with_user_following_list:
+    done_with.write(i + "\n")
 
 book.close()
