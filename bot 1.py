@@ -33,10 +33,26 @@ done_with = open(r"done with profile links.txt", "r+")
 # making list of links from profile links file
 profile_links_list = []
 for i in profile_links_file:
-    profile_links_list.append(i[:-1])
+    if i[-1] == "\n":
+        profile_links_list.append(i[:-1])
+    else:
+        profile_links_list.append(i)
+
+# making done with profile links list
 done_with_list = []
 for i in done_with:
-    done_with_list.append(i[:-1])
+    if i[-1] == "\n":
+        done_with_list.append(i[:-1])
+    else:
+        done_with_list.append(i)
+
+# making done with user's following list
+done_with_user_following_list = []
+for i in user_following_file:
+    if i[-1] == "\n":
+        done_with_user_following_list.append(i[:-1])
+    else:
+        done_with_user_following_list.append(i)
 
 # Iterating links and getting their following
 for i in profile_links_list:
@@ -52,24 +68,33 @@ for i in profile_links_list:
         sleeper()
         following_list = []
         count_1 = 0
+        count_2 = 0
+        prev_count = 0
 
         # Getting their following
-        while count_1 < int(count):
+        while count_1 <= int(count):
             following = browser.find_elements(By.CLASS_NAME, "_ab8y")
+            if count_1 == prev_count:
+                count_2 += 1
+            if count_2 == 4:
+                break
 
             # Scrolling following list to get all the following
             for j in range(count_1, len(following)):
                 browser.execute_script("arguments[0].scrollIntoView();", following[j])
                 count_1 += 1
+                print(following[j].text)
                 following_list.append(following[j].text)
+            prev_count = count_1
             sleeper()
 
         # Adding link to done with file
         done_with.write(i + "\n")
 
         # Adding the following to final file of all following
+        print(following_list)
         for j in following_list:
-            if j not in following_list:
+            if j not in done_with_user_following_list:
                 user_following_file.write(j)
                 user_following_file.write("\n")
 

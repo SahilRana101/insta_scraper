@@ -9,45 +9,98 @@ def sleeper():
     time.sleep(random.randrange(3, 5))
 
 
-# function to make bot type like a human
-def virtual_human(key, element):
-    for j in key:
-        element.send_keys(j)
-        time.sleep(float("{:.2f}".format(random.uniform(0.1, 0.4))))
-
-
-# Logging in
-browser = webdriver.Chrome(r"C:\Users\sahil\PycharmProjects\insta_scrapper\chromedriver")
+browser = webdriver.Chrome(r"\chromedriver")
 browser.implicitly_wait(1)
-browser.get('https://www.instagram.com/mr.ace_hole/')
 sleeper()
 
-bio_data = browser.find_element(By.CLASS_NAME, "_aa_c")
-a = bio_data.text.split()
-f = open("biodata.txt", "w", encoding="utf-8")
-for i in range(len(a)):
-    if "@" in a[i] or "." and "/" in a[i]:
-        f.write(a[i])
-        f.write("\n")
 
-book = xlsxwriter.Workbook('Example2.xlsx')
+# Logging into Instagram
+browser.get('https://www.instagram.com/')
+sleeper()
+sleeper()
+username_input = browser.find_element(By.CSS_SELECTOR, "input[name='username']")
+password_input = browser.find_element(By.CSS_SELECTOR, "input[name='password']")
+sleeper()
+username_input.send_keys("macleodganjtrip@gmail.com")
+password_input.send_keys("selenium@1")
+login_button = browser.find_element(By.XPATH, "//button[@type='submit']")
+login_button.click()
+sleeper()
+
+
+
+# Opening files
+user_following_file = open(r"user's following list.txt", "r")
+done_with = open(r"done with user's following list.txt", "r+")
+extra_file = open(r"Extra but important file.txt", "r")
+
+# Shenanigans
+count = 0
+for i in extra_file:
+    count = i
+
+# Opening Excel file and creating a sheet
+book = xlsxwriter.Workbook('Bio data ' + count + '.xlsx')
 sheet = book.add_worksheet()
 
-# Rows and columns are zero indexed.
+# closing and reopening extra file to write to it
+extra_file.close()
+extra_file = open(r"Extra but important file.txt", "w")
+extra_file.write(str(int(count)+1))
+
+# making user's following list
+user_following_list = []
+for i in user_following_file:
+    if i[-1] == "\n":
+        user_following_list.append(i[:-1])
+    else:
+        user_following_list.append(i)
+
+# making done with user's following list
+done_with_user_following_list = []
+for i in done_with:
+    if i[-1] == "\n":
+        done_with_user_following_list.append(i[:-1])
+    else:
+        done_with_user_following_list.append(i)
+
+
+# Shenanigans
 row = 0
 column = 0
-links_and_mentions = ""
-sheet.write(0, 0, "mr.ace_hole")
 
-for i in range(len(a)):
-    if "@" in a[i] and a[i].index("@") == 0:
-        links_and_mentions += str(a[i])
-        links_and_mentions += ", "
-    if "." and "/" in a[i]:
-        links_and_mentions += str(a[i])
-        links_and_mentions += ", "
-links_and_mentions = links_and_mentions[:-2]
 
-sheet.write(0, 1, links_and_mentions)
+# Iterating following list of users
+for i in user_following_list:
+    if i not in done_with_user_following_list:
+        browser.get("https://www.instagram.com/" + i + "/")
+        sleeper()
+        sleeper()
+        bio_data = browser.find_element(By.CLASS_NAME, "_aa_c")
+        sheet.write(row, column, i)
+        sheet.write(row, column + 1, "https://www.instagram.com/" + i + "/")
+        sheet.write(row, column + 2, bio_data.text)
+        bio_data_tokens = bio_data.text.split()
+
+        links = ""
+        mentions = ""
+        count_1 = 0
+        count_2 = 0
+
+        for j in range(len(bio_data_tokens)):
+            if "@" in bio_data_tokens[j] and bio_data_tokens[j].index("@") == 0:
+                mentions += str(bio_data_tokens[j])
+                mentions += ", "
+                count_1 = 1
+            if "." and "/" in bio_data_tokens[j]:
+                links += str(bio_data_tokens[j])
+                links += ", "
+                count_2 = 1
+        links = links[:-2]
+        mentions = mentions[:-2]
+
+        sheet.write(row, column + 3, mentions)
+        sheet.write(row, column + 4, links)
+        row += 1
 
 book.close()
