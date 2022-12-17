@@ -1,0 +1,76 @@
+Bot-1 -
+
+To get usernames of the following of all users in "profile links" FILE
+
+
+Working -
+ - log in to insta
+ - open 3 FILES (profile links (read only), users' following (read and append), done with profile links (read and append))
+ - making 3 LISTS for all those files' data
+ - iterate profile links LIST
+   - writing all of the following's usernames in "users' following" LIST
+   - on each iteration profile's link is appended in "done with" LIST
+   - writing data from "users' following" LIST to "users' following" FILE
+ - when a link is repeated, it just skips it. 
+
+
+To-do after testing the bot-
+ - clear all text FILES
+
+
+How to use -
+ - populate "profile links" FILE with profile links
+ - run the bot any number of times and it will get user names from following of new profile links
+
+Configuration - 
+ - Sleeper function
+   - change the time in sleeper function to minimum required time to load pages
+
+
+
+
+Bot-2 -
+
+To get bio data of users from "users' following" FILE and store all data in excel file
+
+
+Working -
+ - log in to insta
+ - open 3 FILES (user's following (read only), done with users' following (read and append), Extra file (read and append))
+ - getting excel file number from extra file
+ - create different excel file each time bot runs
+ - reopening extra file to change excel file number in extra file
+ - making 2 LISTS for users and done with users follwing FILES
+ - iterating following list
+   - get bio data
+   - write to excel sheet username, profile link, complete bio data in column 0,1,2 respectively
+   - iterate bio data tokens
+     - find links and mentions
+   - write them to excel column 3,4
+   - append username to done with users' following LIST
+ - write usernames from LIST to done with users' following FILE
+ - write done with usernames to done with FILE
+
+
+To-do after testing the bot-
+ - change the digit inside "Extra file" FILE to 0.
+ - delete excel files
+ - clear data from text files other than "Extra file" FILE
+
+
+How to use -
+ - only use after using bot-1 at least once
+
+
+Configuration -
+ - Sleeper function
+   - change the time in sleeper function to minimum required time to load pages
+
+
+
+
+
+
+
+
+

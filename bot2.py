@@ -17,10 +17,8 @@ sleeper()
 # Logging into Instagram
 browser.get('https://www.instagram.com/')
 sleeper()
-sleeper()
 username_input = browser.find_element(By.CSS_SELECTOR, "input[name='username']")
 password_input = browser.find_element(By.CSS_SELECTOR, "input[name='password']")
-sleeper()
 username_input.send_keys("macleodganjtrip@gmail.com")
 password_input.send_keys("selenium@1")
 login_button = browser.find_element(By.XPATH, "//button[@type='submit']")
@@ -28,13 +26,12 @@ login_button.click()
 sleeper()
 
 
-
 # Opening files
-user_following_file = open(r"user's following list.txt", "r")
-done_with = open(r"done with user's following list.txt", "r+")
-extra_file = open(r"Extra but important file.txt", "r")
+user_following_file = open(r"users' following list.txt", "r")
+done_with = open(r"done with users' following list.txt", "r+")
+extra_file = open(r"Extra file.txt", "r")
 
-# Shenanigans
+# Excel file number set
 count = 0
 for i in extra_file:
     count = i
@@ -45,7 +42,7 @@ sheet = book.add_worksheet()
 
 # closing and reopening extra file to write to it
 extra_file.close()
-extra_file = open(r"Extra but important file.txt", "w")
+extra_file = open(r"Extra file.txt", "w")
 extra_file.write(str(int(count)+1))
 
 # making user's following list
@@ -65,12 +62,12 @@ for i in done_with:
         done_with_user_following_list.append(i)
 
 
-# Shenanigans
+# row and column set
 row = 0
 column = 0
 
 
-# Iterating following list of users
+# iterating following list
 for i in user_following_list:
     if i not in done_with_user_following_list:
         browser.get("https://www.instagram.com/" + i + "/")
@@ -87,12 +84,15 @@ for i in user_following_list:
         count_1 = 0
         count_2 = 0
 
+        # iterate bio data tokens and find links and mentions
         for j in range(len(bio_data_tokens)):
             if "@" in bio_data_tokens[j] and bio_data_tokens[j].index("@") == 0:
                 mentions += str(bio_data_tokens[j])
                 mentions += ", "
                 count_1 = 1
-            if "." and "/" in bio_data_tokens[j]:
+            if "." and "/" in bio_data_tokens[j] or bio_data_tokens[j].endswith(".com") or bio_data_tokens[j].\
+                    endswith(".in") or bio_data_tokens[j].endswith(".org") or bio_data_tokens[j].endswith(".net") or \
+                    bio_data_tokens[j].endswith(".info") or bio_data_tokens[j].endswith(".biz"):
                 links += str(bio_data_tokens[j])
                 links += ", "
                 count_2 = 1
@@ -105,7 +105,12 @@ for i in user_following_list:
         row += 1
 
 
+# writing done with usernames to done with FILE
 for i in done_with_user_following_list:
     done_with.write(i + "\n")
+
+user_following_file.close()
+done_with.close()
+extra_file.close()
 
 book.close()
