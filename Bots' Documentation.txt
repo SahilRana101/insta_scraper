@@ -14,19 +14,9 @@ Working -
  - when a link is repeated, it just skips it. 
 
 
-To-do after testing the bot-
- - clear all text FILES
-
-
 How to use -
  - populate "profile links" FILE with profile links
  - run the bot any number of times and it will get user names from following of new profile links
-
-Configuration - 
- - Sleeper function
-   - change the time in sleeper function to minimum required time to load pages
-
-
 
 
 Bot-2 -
@@ -36,10 +26,7 @@ To get bio data of users from "users' following" FILE and store all data in exce
 
 Working -
  - log in to insta
- - open 3 FILES (user's following (read only), done with users' following (read and append), Extra file (read and append))
- - getting excel file number from extra file
- - create different excel file each time bot runs
- - reopening extra file to change excel file number in extra file
+ - open 3 FILES (user's following (read only), done with users' following (read and append), Bio data and links (excel file read and write))
  - making 2 LISTS for users and done with users follwing FILES
  - iterating following list
    - get bio data
@@ -47,30 +34,39 @@ Working -
    - iterate bio data tokens
      - find links and mentions
    - write them to excel column 3,4
-   - append username to done with users' following LIST
- - write usernames from LIST to done with users' following FILE
- - write done with usernames to done with FILE
-
-
-To-do after testing the bot-
- - change the digit inside "Extra file" FILE to 0.
- - delete excel files
- - clear data from text files other than "Extra file" FILE
+   - in links find linktree, milkshake, bio site, zez.am, beacons links
+     - open each and get links within and write them to excel file
+   - save excel file and close other files
+   - write username to done with users' following FILE
 
 
 How to use -
  - only use after using bot-1 at least once
 
 
-Configuration -
- - Sleeper function
-   - change the time in sleeper function to minimum required time to load pages
+Bot-3 - 
+
+to clean excel file
+
+
+Working - 
+ - open excel file
+ - get value of column of ranked list last row of data
+ - get ranked links if any save them in lists
+ - find unimportant links, mails and delete them
+ - then check if user has important mentions and links in their bio data and remove that user's row
+ - now write ranked links back to the excel file coz some might be removed when we removed rows
+ - now that value is put as it was
 
 
 
 
+Bot-4 - 
 
+to rank all links by their count
 
-
-
-
+Working - 
+ - get all links from columns 5,7,9,11,13,15
+ - get their sub domain name + root domain name
+ - count them by their occurance in the list
+ - domain with the most occurances is at the top in 16th column
